@@ -10,7 +10,9 @@
 
 # production
 /build
-
+/src/firebase.config.js
+firebase.json
+.firebaserc
 # misc
 .DS_Store
 .env.local

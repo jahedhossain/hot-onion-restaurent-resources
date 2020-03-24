@@ -1,0 +1,38 @@
+.item img {
+    width: 200px;
+}
+
+.item h2 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.item {
+    padding: 30px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #f1f1f1;
+    margin: 11px;
+    transition: all 0.2s;
+    border-radius: 10px;
+}
+.item:hover{
+    background: #e2e1e1;
+}
+.single_product a, .single_product a:hover{
+    text-decoration: none;
+    color: #000;
+}
+.single_product a{
+    color: #000;
+}
+.item p {
+    font-size: 18px;
+}
+
+.item b {
+    font-size: 22px;
+}

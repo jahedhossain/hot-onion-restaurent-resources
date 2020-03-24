@@ -1,0 +1,77 @@
+.form-group .submit{
+    width: 100%;
+    color: #fff;
+    font-size: 18px;
+    padding: 5px 0;
+    font-weight: 700;
+}
+.delivery ul li{
+    list-style: none;
+    padding: 10px 30px;
+    font-size: 25px;
+}
+.delivery{
+    margin-top: 30px;
+}
+.delivery h2{
+    font-size: 30px;
+    padding: 10px 0;
+    border-bottom: 2px solid rgb(197, 194, 194);
+    margin-bottom: 30px;
+}
+.delivery input {
+    margin-bottom: 10px;
+    padding: 20px 15px;
+    background: rgb(243, 238, 238);
+}
+.delivery textarea{
+    background: rgb(243, 238, 238);
+}
+.delivery .form-group span{
+display: block;
+    margin-bottom: 10px !important;
+    color: red;
+
+}
+.product_list {
+    display: flex;
+    background: rgb(243, 238, 238);
+    padding: 10px;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+}
+.product_list img{
+    width: 100px;
+    flex: 2;
+    padding: 10px;
+}
+.product_list .content {
+    flex: 5;
+}
+.product_list .quntati{
+    flex: 2;
+}
+.product_list .content h5{
+    font-size: 18px;
+}
+.product_list .content h4{
+    color: red;
+    font-size: 20px;
+}
+.product_list .content p{
+    color: rgb(197, 194, 194);
+    font-size: 15px;
+}
+.price_table .table{
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0 0 0;
+}
+.price_table{
+    padding: 15px 0;
+}
+.delivery button {
+width: 100%;
+}

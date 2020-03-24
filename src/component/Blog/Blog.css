@@ -1,0 +1,51 @@
+.title h1{
+    padding: 15px 0;
+    font-size: 40px;
+    margin-top: 20px;
+    margin-bottom: 0;
+    font-weight: bold;
+}
+.title p{
+  padding: 0px;
+  font-size: 22px;
+}
+.blog .blog_icon{
+    width: 40px;
+    height: 40px;
+    background: rgb(184, 11, 20);
+    color: #fff;
+    display: block;
+    text-align: center;
+    font-size: 20px;
+    line-height: 40px;
+    border-radius: 50%;
+
+}
+.padding-top{
+    padding-top: 15px;
+}
+.blog {
+    margin-top: 25px;
+}
+.blog h4 {
+    font-size: 25px;
+}
+.blog p{
+    font-size: 18px;
+}
+.blog a{
+    font-size: 20px;
+}
+.arrow{
+    width: 30px;
+    height: 30px;
+    background: rgb(59, 180, 59);
+    border-radius: 50%;
+    display: inline-block;
+    text-align: center;
+    font-size: 15px;
+    color: #fff;
+    line-height: 30px;
+    margin-left: 10px;
+
+}

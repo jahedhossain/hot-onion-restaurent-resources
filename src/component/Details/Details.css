@@ -1,0 +1,37 @@
+.details ul li{
+    list-style: none;
+    padding: 10px 30px;
+    font-size: 25px;
+}
+.details{
+    margin-top: 30px;
+}
+.details h1{
+    font-size: 30px;
+    padding: 10px 0;
+}
+.incrementDecrement{
+    border: 1px solid rosybrown;
+    padding: 8px 0;
+    border-radius: 100px;
+}
+.incrementDecrement strong {
+      padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 25px;
+}
+.incrementDecrement input{
+    width: 40px;
+    margin: 0;
+    border: none;
+}
+.details .price{
+    padding: 0 10px;
+    font-size: 30px;
+}
+.multiple_details_img img{
+    width: 150px;
+    padding-right: 20px;
+    margin-top: 30px;
+}

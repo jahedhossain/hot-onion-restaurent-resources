@@ -1,0 +1,14 @@
+.banner {
+    height: 450px;
+    background-image: url(../../assets//image/bannerbackground.png);
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.banner .form-control{
+    width: 300px;
+
+}
+.search_box {
+    padding-top: 20px;
+}

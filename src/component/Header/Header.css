@@ -1,0 +1,23 @@
+.header-top{
+    padding: 15px 0;
+}
+.logo img{
+    width: 150px;
+}
+.btn {
+    border-radius: 50px ;
+}
+.right_side ul li{
+ list-style: none;
+ padding-left: 20px ;   
+}
+.itemCount{
+    width: 20px;
+    height: 20px;
+    background: red;
+    display: inline-block;
+    text-align: center;
+    border-radius: 50%;
+    color: #fff;
+    line-height: 20px;
+}

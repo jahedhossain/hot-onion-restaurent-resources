@@ -1,0 +1,31 @@
+
+.signup_from_signup img{
+    width: 300px;
+    padding: 40px 0;
+}
+.signup_from_signup .form-control{
+    width: 600px;
+    padding: 25px;
+    margin: 15px 0 0 0 ;
+}
+.signup_from_signup .submit{
+    width: 100%;
+    padding: 10px;
+    color: #fff;
+    font-size: 20px;
+}
+.click_toggle {
+    font-size: 18px;
+    color: red !important;
+    padding: 10px 0;
+    cursor: pointer;
+    background: none;
+    border: none;
+
+}
+.form-control {
+    text-align: left;
+}
+.form-group .submit{
+    margin-top: 15px;
+}
