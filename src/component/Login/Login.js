@@ -51,7 +51,7 @@ function Signup() {
       .signInWithEmailAndPassword(data.email, data.password)
       .then(user => {
         console.log(user);
-        window.location.pathname = "/delivery";
+        window.location.pathname = "/review";
       })
       .catch(err => {
         console.log(err);

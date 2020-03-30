@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from "react";
-import "./Delivery.css";
+import "./Review.css";
 import { useForm } from "react-hook-form";
-import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import img from "../../assets/image/Dinner/dinner1.png";
-import { getDatabaseCart } from "../../utilities/databaseManager";
+import {
+  getDatabaseCart,
+  addToDatabaseCart
+} from "../../utilities/databaseManager";
 import fackData from "../../fakeData";
 
-function Delivery() {
-  const { register, handleSubmit, errors } = useForm();
-
+function Review() {
+  const { register, errors } = useForm();
   const [products, setProducts] = useState([]);
+  const [price, setPrice] = useState({
+    price: "",
+    tex: "",
+    delivery: "",
+    totalPrice: "",
+    quantity: ""
+  });
 
-  const [price, setPrice] = useState({});
-
+  // card data store
   useEffect(() => {
-    //cart
     const savedCart = getDatabaseCart();
     const productKeys = Object.keys(savedCart);
     const cartProducts = productKeys.map(key => {
@@ -24,32 +29,59 @@ function Delivery() {
       product.quantity = savedCart[key];
       return product;
     });
-    const price = cartProducts.reduce((total, price) => total + price.price, 0);
-    const quantity = cartProducts.reduce(
-      (total, quantity) => total + quantity.quantity,
+    setProducts(cartProducts);
+  }, []);
+
+  // + button click increment
+  const handleIncrement = storeProducts => {
+    const update = [...products];
+    const cartproduct = update.find(
+      product => product.key === storeProducts.key
+    );
+    cartproduct.quantity = cartproduct.quantity + 1;
+    setProducts(update);
+    addToDatabaseCart(cartproduct.key, cartproduct.quantity);
+  };
+
+  // - button click decrement
+  const handleDecrement = storeProducts => {
+    const update = [...products];
+    const cartproduct = update.find(
+      product => product.key === storeProducts.key
+    );
+    cartproduct.quantity = cartproduct.quantity - 1;
+    setProducts(update);
+    addToDatabaseCart(cartproduct.key, cartproduct.quantity);
+  };
+
+  useEffect(() => {
+    // price
+    const allPrice = products.reduce(
+      (total, product) => total + product.price * product.quantity,
       0
     );
-
-    const tex = (price / 100) * 15;
+    // Quantity
+    const quantity = products.reduce(
+      (total, product) => total + product.quantity,
+      0
+    );
+    // Tex
+    const tex = (allPrice / 100) * 15;
+    // Delivery
     const delivery = 2;
-    const totalPrice = tex + delivery + price;
+    // Total_Price
+    const totalPrice = tex + delivery + allPrice;
 
-    setPrice({
-      price: price.toFixed(2),
+    const newPrice = {
+      ...price,
+      price: allPrice.toFixed(2),
       tex: tex.toFixed(2),
       delivery: delivery.toFixed(2),
       totalPrice: totalPrice.toFixed(2),
       quantity: quantity
-    });
-    setProducts(cartProducts);
-
-    // product add or delate
-    const previousCart = productKeys.map(existingKey => {
-      const product = fackData.find(pd => pd.key === existingKey);
-      product.quantity = savedCart[existingKey];
-      return product;
-    });
-  }, []);
+    };
+    setPrice(newPrice);
+  }, [products]);
 
   return (
     <div className="container delivery">
@@ -134,9 +166,9 @@ function Delivery() {
               </div>
               <div className="quntati">
                 <span className="incrementDecrement">
-                  <strong>-</strong>
+                  <strong onClick={() => handleDecrement(product)}>-</strong>
                   <b>{product.quantity}</b>
-                  <strong>+</strong>
+                  <strong onClick={() => handleIncrement(product)}>+</strong>
                 </span>
               </div>
             </div>
@@ -170,4 +202,4 @@ function Delivery() {
   );
 }
 
-export default Delivery;
+export default Review;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Signup.css";
 import logo from "../../assets/image/logo2.png";
@@ -45,6 +45,16 @@ function Signup() {
     }
   };
 
+  // user login or not login check
+  useEffect(() => {
+    var user = firebase.auth().currentUser;
+    if (user) {
+      window.location.pathname = "/review";
+    } else {
+      // No user is signed in.
+    }
+  }, []);
+
   // login from submit from handlebar
   const onSubmitLogin = data => {
     console.log(data);
@@ -53,7 +63,7 @@ function Signup() {
       .signInWithEmailAndPassword(data.email, data.password)
       .then(user => {
         console.log(user);
-        window.location.pathname = "/delivery";
+        window.location.pathname = "/review";
       })
       .catch(err => {
         console.log(err);
@@ -69,6 +79,7 @@ function Signup() {
       setLogin(true);
     }
   };
+
   return (
     <div className="container">
       <div className="row">

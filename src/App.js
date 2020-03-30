@@ -11,7 +11,8 @@ import NoMatch from "./component/NoMatch/NoMatch";
 
 import Signup from "./component/Signup/Signup";
 import Login from "./component/Login/Login";
-import Delivery from "./component/Delivery/Delivery";
+import Delivery from "./component/Review/Review";
+import PrivateRoute from "./PrivateRoute";
 
 function App() {
   return (
@@ -29,10 +30,10 @@ function App() {
             <Header></Header>
             <Details></Details>
           </Route>
-          <Route path="/delivery">
+          <PrivateRoute path="/review">
             <Header></Header>
             <Delivery></Delivery>
-          </Route>
+          </PrivateRoute>
           <Route path="/signup">
             <Signup></Signup>
           </Route>
