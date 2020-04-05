@@ -5,38 +5,63 @@ import "firebase/auth";
 import "firebase/firestore";
 import {
   getDatabaseCart,
-  addToDatabaseCart
+  addToDatabaseCart,
+  processOrder,
 } from "../../utilities/databaseManager";
-import fackData from "../../fakeData";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import CheckoutForm from "../CheckoutForm/CheckoutForm";
 
 function Review() {
-  const { register, errors } = useForm();
+  const [shipment, setShipment] = useState(null);
+  const [shipmentSubmit, setShipmentSubmit] = useState(false);
+  const [ordercomplete, setOrdercomplete] = useState(false);
+  console.log(shipmentSubmit);
+
+  const stripePromise = loadStripe(
+    "pk_test_CCTVlzili93AXMTeFygvz2ls00ONxhFAcj"
+  );
+
   const [products, setProducts] = useState([]);
   const [price, setPrice] = useState({
     price: "",
     tex: "",
     delivery: "",
     totalPrice: "",
-    quantity: ""
+    quantity: "",
   });
+
+  // console.log(products);
 
   // card data store
   useEffect(() => {
     const savedCart = getDatabaseCart();
     const productKeys = Object.keys(savedCart);
-    const cartProducts = productKeys.map(key => {
-      const product = fackData.find(pd => pd.key === key);
-      product.quantity = savedCart[key];
-      return product;
-    });
-    setProducts(cartProducts);
+
+    fetch("http://localhost:4200/foodProductKeys", {
+      method: "POST",
+      body: JSON.stringify(productKeys),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const cartProducts = productKeys.map((key) => {
+          const product = data.find((pd) => pd.key === key);
+          product.quantity = savedCart[key];
+          return product;
+        });
+        setProducts(cartProducts);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   // + button click increment
-  const handleIncrement = storeProducts => {
+  const handleIncrement = (storeProducts) => {
     const update = [...products];
     const cartproduct = update.find(
-      product => product.key === storeProducts.key
+      (product) => product.key === storeProducts.key
     );
     cartproduct.quantity = cartproduct.quantity + 1;
     setProducts(update);
@@ -44,10 +69,10 @@ function Review() {
   };
 
   // - button click decrement
-  const handleDecrement = storeProducts => {
+  const handleDecrement = (storeProducts) => {
     const update = [...products];
     const cartproduct = update.find(
-      product => product.key === storeProducts.key
+      (product) => product.key === storeProducts.key
     );
     cartproduct.quantity = cartproduct.quantity - 1;
     setProducts(update);
@@ -78,10 +103,36 @@ function Review() {
       tex: tex.toFixed(2),
       delivery: delivery.toFixed(2),
       totalPrice: totalPrice.toFixed(2),
-      quantity: quantity
+      quantity: quantity,
     };
     setPrice(newPrice);
   }, [products]);
+
+  const { register, handleSubmit, watch, errors } = useForm();
+  const onSubmit = (data) => {
+    setShipment(data);
+    setShipmentSubmit(true);
+  };
+  const completeOrder = (paymentData) => {
+    const order = {
+      ...shipment,
+      paymentData: paymentData,
+    };
+
+    fetch("http://localhost:4200/foodOrder", {
+      method: "POST",
+      body: JSON.stringify(order),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setOrdercomplete(data);
+        processOrder();
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <div className="container delivery">
@@ -97,7 +148,11 @@ function Review() {
       <div className="row mt-5">
         <div className="col-md-4">
           <h2>Edit Delivery Deatails</h2>
-          <form className="form-group  ">
+          <form
+            className="form-group"
+            onSubmit={handleSubmit(onSubmit)}
+            style={{ display: shipmentSubmit && "none" }}
+          >
             <input
               className="form-control"
               name="dor"
@@ -147,6 +202,22 @@ function Review() {
 
             <input type="submit" className="submit bg-danger btn" />
           </form>
+          <div
+            className="checkoutFrom"
+            style={{ display: shipmentSubmit ? "block" : "none" }}
+          >
+            <div className="form" style={{ display: ordercomplete && "none" }}>
+              <Elements stripe={stripePromise}>
+                <CheckoutForm completeOrder={completeOrder}></CheckoutForm>
+              </Elements>
+            </div>
+            {ordercomplete && (
+              <div>
+                <h1> Your order complete</h1>
+                <p> Your order Id: {ordercomplete.paymentData.id}</p>
+              </div>
+            )}
+          </div>
         </div>
         <div className="col-md-4 offset-md-4">
           <div className="restaurant_info">
@@ -156,23 +227,27 @@ function Review() {
             <p>Arriving in 20-30 min</p>
             107 Rd No 8
           </div>
-          {products.map(product => (
-            <div className="product_list" key={product.key}>
-              <img src={product.image} alt="" />
-              <div className="content">
-                <h5>{product.title}</h5>
-                <h4>${product.price}</h4>
-                <p>Delivery fee</p>
+          {products.length ? (
+            products.map((product) => (
+              <div className="product_list" key={product.key}>
+                <img src={product.image} alt="" />
+                <div className="content">
+                  <h5>{product.title}</h5>
+                  <h4>${product.price}</h4>
+                  <p>Delivery fee</p>
+                </div>
+                <div className="quntati">
+                  <span className="incrementDecrement">
+                    <strong onClick={() => handleDecrement(product)}>-</strong>
+                    <b>{product.quantity}</b>
+                    <strong onClick={() => handleIncrement(product)}>+</strong>
+                  </span>
+                </div>
               </div>
-              <div className="quntati">
-                <span className="incrementDecrement">
-                  <strong onClick={() => handleDecrement(product)}>-</strong>
-                  <b>{product.quantity}</b>
-                  <strong onClick={() => handleIncrement(product)}>+</strong>
-                </span>
-              </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="mt-5 text-center"> Loading please wait</p>
+          )}
 
           <div className="price_table">
             <div className="table">

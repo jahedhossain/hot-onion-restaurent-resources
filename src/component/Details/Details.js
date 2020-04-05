@@ -1,19 +1,25 @@
 import React, { useState, useEffect } from "react";
 import "./Details.css";
-import fackData from "../../fakeData";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import {
-  addToDatabaseCart,
-  getDatabaseCart
-} from "../../utilities/databaseManager";
+import { addToDatabaseCart } from "../../utilities/databaseManager";
 
 function Details() {
   const [count, setCount] = useState(1);
+  const [foodProduct, setFoodProduct] = useState({});
+  const [loading, setLoading] = useState(false);
+
   const { productKey } = useParams();
-  const product = fackData.find(product => product.key === productKey);
-  const { image, title, description, price, key } = product;
+
+  useEffect(() => {
+    fetch("http://localhost:4200/foodProduct/" + productKey)
+      .then((res) => res.json())
+      .then((data) => {
+        setFoodProduct(data);
+        setLoading(true);
+      });
+  }, [productKey]);
 
   const handleIncrement = () => {
     const currentCount = count + 1;
@@ -29,22 +35,8 @@ function Details() {
     }
   };
   const clickHendelar = () => {
-    addToDatabaseCart(key, count);
+    addToDatabaseCart(foodProduct.key, count);
   };
-
-  useEffect(() => {
-    const savedCart = getDatabaseCart();
-    const productKeys = Object.keys(savedCart);
-    const previousCart = productKeys.map(existingKey => {
-      const product = fackData.find(pd => pd.key === existingKey);
-      product.quantity = savedCart[existingKey];
-      return product;
-    });
-    const quantity = previousCart.find((a, b) => a.key === key);
-    if (quantity) {
-      setCount(quantity.quantity);
-    }
-  }, []);
 
   return (
     <div className="details">
@@ -58,30 +50,34 @@ function Details() {
             </ul>
           </div>
         </div>
-        <div className="row">
-          <div className="col-md-6">
-            <h1>{title}</h1>
-            <p>{description}</p>
-            <p>
-              <strong className="price">${price}</strong>
-              <span className="incrementDecrement">
-                <strong onClick={handleDecrement}>-</strong>
-                <b>{count}</b>
-                <strong onClick={handleIncrement}>+</strong>
-              </span>
-            </p>
-            <button className="btn btn-danger" onClick={clickHendelar}>
-              <FontAwesomeIcon icon={faShoppingCart} /> Add Cart
-            </button>
-            <div className="multiple_details_img">
-              <img src={image} alt="" />
-              <img src={image} alt="" />
+        {loading ? (
+          <div className="row">
+            <div className="col-md-6">
+              <h1>{foodProduct.title}</h1>
+              <p>{foodProduct.description}</p>
+              <p>
+                <strong className="price">${foodProduct.price}</strong>
+                <span className="incrementDecrement">
+                  <strong onClick={handleDecrement}>-</strong>
+                  <b>{count}</b>
+                  <strong onClick={handleIncrement}>+</strong>
+                </span>
+              </p>
+              <button className="btn btn-danger" onClick={clickHendelar}>
+                <FontAwesomeIcon icon={faShoppingCart} /> Add Cart
+              </button>
+              <div className="multiple_details_img">
+                <img src={foodProduct.image} alt="" />
+                <img src={foodProduct.image} alt="" />
+              </div>
+            </div>
+            <div className="col-md-6">
+              <img src={foodProduct.image} alt="" />
             </div>
           </div>
-          <div className="col-md-6">
-            <img src={image} alt="" />
-          </div>
-        </div>
+        ) : (
+          <p className="mt-5 text-center"> Loading please wait</p>
+        )}
       </div>
     </div>
   );

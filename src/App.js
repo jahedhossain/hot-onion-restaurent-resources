@@ -13,6 +13,7 @@ import Signup from "./component/Signup/Signup";
 import Login from "./component/Login/Login";
 import Delivery from "./component/Review/Review";
 import PrivateRoute from "./PrivateRoute";
+import DataUpload from "./component/DataUpload/DataUpload";
 
 function App() {
   return (
@@ -39,6 +40,9 @@ function App() {
           </Route>
           <Route path="/login">
             <Login></Login>
+          </Route>
+          <Route path="/dataUpload">
+            <DataUpload></DataUpload>
           </Route>
           <Route path="*">
             <NoMatch />
