@@ -12,11 +12,11 @@ const Header = () => {
   const [login, setLogin] = useState(false);
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(function(user) {
+    firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
         setLogin(true);
       } else {
-        console.log("not found");
+        // console.log("user not login");
         setLogin(false);
       }
     });
@@ -26,10 +26,10 @@ const Header = () => {
     firebase
       .auth()
       .signOut()
-      .then(function() {
+      .then(function () {
         console.log("LogOut");
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log("LogOut error");
       });
   };

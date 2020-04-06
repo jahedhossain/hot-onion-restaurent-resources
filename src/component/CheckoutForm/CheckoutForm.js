@@ -37,7 +37,7 @@ const useOptions = () => {
 
 const CheckoutForm = (props) => {
   const [error, setError] = useState("");
-  const [paymentInfo, setPaymentInfor] = useState("");
+  // const [paymentInfor, setPaymentInfor] = useState("");
   const stripe = useStripe();
   const elements = useElements();
   const options = useOptions();
@@ -63,7 +63,7 @@ const CheckoutForm = (props) => {
         brand: payload.paymentMethod.card.brand,
         last4: payload.paymentMethod.card.last4,
       };
-      setPaymentInfor(paymentInfo);
+      // setPaymentInfor(paymentInfo);
       props.completeOrder(paymentInfo);
       setError("");
     }

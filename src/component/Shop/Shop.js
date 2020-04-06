@@ -16,7 +16,7 @@ function Shop() {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    fetch("http://localhost:4200/foodProduct")
+    fetch("https://sheltered-lake-15300.herokuapp.com/foodProduct")
       .then((res) => res.json())
       .then((data) => setAllfoods(data))
       .catch((err) => console.log(err));
@@ -25,7 +25,7 @@ function Shop() {
   // default dinner foods show
   useEffect(() => {
     filterFoods("dinner");
-    const lunch = filterFoods("lunch");
+    const lunch = filterFoods("dinner");
     setProduct(lunch);
   }, [allfoods]);
 

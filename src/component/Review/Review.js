@@ -38,7 +38,7 @@ function Review() {
     const savedCart = getDatabaseCart();
     const productKeys = Object.keys(savedCart);
 
-    fetch("http://localhost:4200/foodProductKeys", {
+    fetch("https://sheltered-lake-15300.herokuapp.com/foodProductKeys", {
       method: "POST",
       body: JSON.stringify(productKeys),
       headers: {
@@ -108,7 +108,7 @@ function Review() {
     setPrice(newPrice);
   }, [products]);
 
-  const { register, handleSubmit, watch, errors } = useForm();
+  const { register, handleSubmit, errors } = useForm();
   const onSubmit = (data) => {
     setShipment(data);
     setShipmentSubmit(true);
@@ -119,7 +119,7 @@ function Review() {
       paymentData: paymentData,
     };
 
-    fetch("http://localhost:4200/foodOrder", {
+    fetch("https://sheltered-lake-15300.herokuapp.com/foodOrder", {
       method: "POST",
       body: JSON.stringify(order),
       headers: {
@@ -146,13 +146,9 @@ function Review() {
         </div>
       </div>
       <div className="row mt-5">
-        <div className="col-md-4">
+        <div className="col-md-4" style={{ display: ordercomplete && "none" }}>
           <h2>Edit Delivery Deatails</h2>
-          <form
-            className="form-group"
-            onSubmit={handleSubmit(onSubmit)}
-            style={{ display: shipmentSubmit && "none" }}
-          >
+          <form className="form-group" onSubmit={handleSubmit(onSubmit)}>
             <input
               className="form-control"
               name="dor"
@@ -202,6 +198,68 @@ function Review() {
 
             <input type="submit" className="submit bg-danger btn" />
           </form>
+        </div>
+        <div className="col-md-4 offset-md-4">
+          <div
+            className="card-info"
+            style={{ display: shipmentSubmit ? "none" : "block" }}
+          >
+            <div className="restaurant_info">
+              <p>
+                From: <strong>Gulshan Plaza Restaurant GPR</strong>
+              </p>
+              <p>Arriving in 20-30 min</p>
+              107 Rd No 8
+            </div>
+            {products.length ? (
+              products.map((product) => (
+                <div className="product_list" key={product.key}>
+                  <img src={product.image} alt="" />
+                  <div className="content">
+                    <h5>{product.title}</h5>
+                    <h4>${product.price}</h4>
+                    <p>Delivery fee</p>
+                  </div>
+                  <div className="quntati">
+                    <span className="incrementDecrement">
+                      <strong onClick={() => handleDecrement(product)}>
+                        -
+                      </strong>
+                      <b>{product.quantity}</b>
+                      <strong onClick={() => handleIncrement(product)}>
+                        +
+                      </strong>
+                    </span>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="mt-5 text-center"> Loading please wait</p>
+            )}
+
+            <div className="price_table">
+              <div className="table">
+                <p>Subtotal: {price.quantity} item</p>
+                <p>${price.price}</p>
+              </div>
+              <div className="table">
+                <p>Tex (15%)</p>
+                <p>${price.tex}</p>
+              </div>
+              <div className="table">
+                <p>Delivery fee</p>
+                <p>${price.delivery}</p>
+              </div>
+              <div className="table">
+                <h4>Total </h4>
+                <p> ${price.totalPrice}</p>
+              </div>
+            </div>
+
+            <button className="btn btn-outline-dark" disabled>
+              Place Order
+            </button>
+          </div>
           <div
             className="checkoutFrom"
             style={{ display: shipmentSubmit ? "block" : "none" }}
@@ -211,67 +269,14 @@ function Review() {
                 <CheckoutForm completeOrder={completeOrder}></CheckoutForm>
               </Elements>
             </div>
-            {ordercomplete && (
-              <div>
-                <h1> Your order complete</h1>
-                <p> Your order Id: {ordercomplete.paymentData.id}</p>
-              </div>
-            )}
           </div>
         </div>
-        <div className="col-md-4 offset-md-4">
-          <div className="restaurant_info">
-            <p>
-              From: <strong>Gulshan Plaza Restaurant GPR</strong>
-            </p>
-            <p>Arriving in 20-30 min</p>
-            107 Rd No 8
+        {ordercomplete && (
+          <div>
+            <h1> Your order complete</h1>
+            <p>Your order Id: {ordercomplete.paymentData.id}</p>
           </div>
-          {products.length ? (
-            products.map((product) => (
-              <div className="product_list" key={product.key}>
-                <img src={product.image} alt="" />
-                <div className="content">
-                  <h5>{product.title}</h5>
-                  <h4>${product.price}</h4>
-                  <p>Delivery fee</p>
-                </div>
-                <div className="quntati">
-                  <span className="incrementDecrement">
-                    <strong onClick={() => handleDecrement(product)}>-</strong>
-                    <b>{product.quantity}</b>
-                    <strong onClick={() => handleIncrement(product)}>+</strong>
-                  </span>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p className="mt-5 text-center"> Loading please wait</p>
-          )}
-
-          <div className="price_table">
-            <div className="table">
-              <p>Subtotal: {price.quantity} item</p>
-              <p>${price.price}</p>
-            </div>
-            <div className="table">
-              <p>Tex (15%)</p>
-              <p>${price.tex}</p>
-            </div>
-            <div className="table">
-              <p>Delivery fee</p>
-              <p>${price.delivery}</p>
-            </div>
-            <div className="table">
-              <h4>Total </h4>
-              <p> ${price.totalPrice}</p>
-            </div>
-          </div>
-
-          <button className="btn btn-outline-dark" disabled>
-            Place Order
-          </button>
-        </div>
+        )}
       </div>
     </div>
   );

@@ -3,7 +3,10 @@ import "./Details.css";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import { addToDatabaseCart } from "../../utilities/databaseManager";
+import {
+  addToDatabaseCart,
+  getDatabaseCart,
+} from "../../utilities/databaseManager";
 
 function Details() {
   const [count, setCount] = useState(1);
@@ -13,7 +16,9 @@ function Details() {
   const { productKey } = useParams();
 
   useEffect(() => {
-    fetch("http://localhost:4200/foodProduct/" + productKey)
+    fetch(
+      "https://sheltered-lake-15300.herokuapp.com/foodProduct/" + productKey
+    )
       .then((res) => res.json())
       .then((data) => {
         setFoodProduct(data);
